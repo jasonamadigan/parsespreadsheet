@@ -31,7 +31,8 @@ class Customer():
 
 
 class CustomerDevice():
-    def __init__(self,cell,name,function,ip,design_id,user='',passwd=''):
+    def __init__(self,row,name,function,ip,design_id,user='',passwd=''):
+        self.row = row
         self.name = name
         self.function = function
         self.ip = ip
@@ -67,12 +68,13 @@ def main(file):
                 ip = sheet['F'+row].value
                 design_id = sheet['H'+row].value
                 #print("Row: ", row, cell.value, " is a switch")
-                device = CustomerDevice(cell.value, name, function, ip, design_id)
+                device = CustomerDevice(row, name, function, ip, design_id)
                 device_list.append(device)
                 
 
     for device in device_list:
         print("-----------------------")
+        print('Row: ', device.row)
         print(device.name)
         print(device.ip)
         print(device.function)
