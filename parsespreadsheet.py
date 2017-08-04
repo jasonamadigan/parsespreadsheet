@@ -50,37 +50,38 @@ class CustomerDevice():
 ##this might need to be a "has-a" type relationship and not an "is-a" child
 #relationship
 
-pattern_3560 = re.compile('3560')
-pattern_2960 = re.compile('2960')
+def main(file):
+    device_list = []
 
-row_contents = [] #list of contains for each row in column G
+    wb = openpyxl.load_workbook(file)
+    sheet = wb.active
 
-device_list = []
+    for col in sheet.iter_rows(min_row=1,max_col=1,max_row=sheet.max_row,column_offset=6):
+        for cell in col:
+            if cell.value == None:
+                continue
+            if re.search('3560', cell.value) != None or re.search('2960', cell.value) != None:
+                row = str(cell.row)
+                name = sheet['D'+row].value
+                function = sheet['E'+row].value
+                ip = sheet['F'+row].value
+                design_id = sheet['H'+row].value
+                #print("Row: ", row, cell.value, " is a switch")
+                device = CustomerDevice(cell.value, name, function, ip, design_id)
+                device_list.append(device)
+                
 
-wb = openpyxl.load_workbook('Test.xlsx')
-sheet = wb.active
-
-for col in sheet.iter_rows(min_row=1,max_col=1,max_row=sheet.max_row,column_offset=6):
-    for cell in col:
-        if cell.value == None:
-            continue
-        if re.search('3560', cell.value) != None or re.search('2960', cell.value) != None:
-            row = str(cell.row)
-            name = sheet['D'+row].value
-            function = sheet['E'+row].value
-            ip = sheet['F'+row].value
-            design_id = sheet['H'+row].value
-            #print("Row: ", row, cell.value, " is a switch")
-            device = CustomerDevice(cell.value, name, function, ip, design_id)
-            device_list.append(device)
-
-print(device_list[0].name)
-print(device_list[0].ip)
-print(device_list[0].function)
-print(device_list[0].design_id)
-
+    for device in device_list:
+        print("-----------------------")
+        print(device.name)
+        print(device.ip)
+        print(device.function)
+        print(device.design_id)
+        print("-----------------------")
 
 
+if __name__ == '__main__':
+    main()
             
 
 
