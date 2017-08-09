@@ -1,15 +1,17 @@
+import openpyxl
+import re
+from Customer import CustomerDevice
+
 #Look at column G, if the model contains '3560' or '2960',
-#then build an object from a parent class that has the following information:
+#If it does, create a CustomerDevice, which is child of the device_class
 
 #Proprety Name (B)
 #WiFi Type (C)
 #Granite CLLI (K)
 #unique Property ID (L)
 
-
 #This class might be called something like customer, and contain a list of devices
 #Those devices wil have specifics like:
-
 
 #Device Name (D
 #Device Function (E)
@@ -17,28 +19,6 @@
 #Design ID (H)
 #username
 #password
-
-import openpyxl
-import re
-
-class Customer():
-    def __init__(property_name,svc_type,clli,property_id):
-        self.property_name = property_name
-        self.svc_type = svc_type
-        self.clli = clli
-        self.property_id = property_id
-        self.devices = []  #list of CustomerDevice objects
-
-
-class CustomerDevice():
-    def __init__(self,row,name,function,ip,design_id,user='',passwd=''):
-        self.row = row
-        self.name = name
-        self.function = function
-        self.ip = ip
-        self.design_id = design_id
-        self.user = user
-        self.passwd = passwd
 
 
 
@@ -68,7 +48,7 @@ def main(file):
                 ip = sheet['F'+row].value
                 design_id = sheet['H'+row].value
                 #print("Row: ", row, cell.value, " is a switch")
-                device = CustomerDevice(row, name, function, ip, design_id)
+                device = CustomerDevice(ip,'','',100000,row, name, function, design_id)
                 device_list.append(device)
                 
 
@@ -83,7 +63,7 @@ def main(file):
 
 
 if __name__ == '__main__':
-    main()
+    main('Test.xlsx')
             
 
 
